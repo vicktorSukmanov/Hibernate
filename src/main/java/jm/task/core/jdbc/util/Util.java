@@ -1,15 +1,15 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-import java.lang.reflect.InvocationTargetException;
+
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -25,7 +25,10 @@ public class Util {
 
     private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory (){
+    private Util() {
+    }
+
+    public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
@@ -56,15 +59,30 @@ public class Util {
         return sessionFactory;
     }
 
-public static Connection getConnection()  {
-    Connection connection = null;
-    try {
-        Class.forName(DRIVER).getDeclaredConstructor().newInstance();
-        connection = DriverManager.getConnection(URL,NAME,PASSWORD);
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            Class.forName(DRIVER).getDeclaredConstructor().newInstance();
+            connection = DriverManager.getConnection(URL, NAME, PASSWORD);
 
-    } catch (Exception e){
-        System.out.println("Не удалось установить соединение с БД");
+        } catch (Exception e) {
+            System.out.println("Не удалось установить соединение с БД");
+        }
+        return connection;
     }
-    return connection;
-}
+
+    public static void closeConnection(Connection connection) {
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public static void closeSsesion(Session session) {
+        session.close();
+    }
+
 }

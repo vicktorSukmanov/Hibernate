@@ -1,6 +1,7 @@
 package jm.task.core.jdbc.service;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.Session;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UserService {
     List<User> getAllUsers();
 
     void cleanUsersTable();
+
+    Session getSession();
 }
